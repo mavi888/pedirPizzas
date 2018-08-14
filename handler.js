@@ -3,6 +3,8 @@
 const uuidv1 = require('uuid/v1');
 const AWS = require('aws-sdk');
 
+const orderMetadataManager = require('./orderMetadataManager');
+
 var sqs = new AWS.SQS({ region: process.env.REGION });
 const QUEUE_URL = process.env.PENDING_ORDER_QUEUE;
 
@@ -40,8 +42,16 @@ module.exports.hacerPedido = (event, context, callback) => {
 module.exports.prepararPedido = (event, context, callback) => {
 	console.log('Preparar pedido fue llamada');
 
-	console.log(event);
-	callback();
+	const order = JSON.parse(event.Records[0].body);
+
+	orderMetadataManager
+		.saveCompletedOrder(order)
+		.then(data => {
+			callback();
+		})
+		.catch(error => {
+			callback(error);
+		});
 };
 
 function sendResponse(statusCode, message, callback) {
