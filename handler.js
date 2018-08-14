@@ -3,6 +3,7 @@
 const uuidv1 = require('uuid/v1');
 
 module.exports.hacerPedido = (event, context, callback) => {
+	console.log('HacerPedido fue llamada');
 	const orderId = uuidv1();
 
 	const response = {
