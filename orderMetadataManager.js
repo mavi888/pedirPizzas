@@ -26,3 +26,28 @@ module.exports.saveCompletedOrder = order => {
 
 	return dynamo.put(params).promise();
 };
+
+module.exports.deliverOrder = orderId => {
+	console.log('Enviar una orden fue llamado');
+
+	const params = {
+		TableName: process.env.COMPLETED_ORDER_TABLE,
+		Key: {
+			orderId
+		},
+		ConditionExpression: 'attribute_exists(orderId)',
+		UpdateExpression: 'set delivery_status = :v',
+		ExpressionAttributeValues: {
+			':v': 'DELIVERED'
+		},
+		ReturnValues: 'ALL_NEW'
+	};
+
+	return dynamo
+		.update(params)
+		.promise()
+		.then(response => {
+			console.log('order delivered');
+			return response.Attributes;
+		});
+};
