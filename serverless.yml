@@ -23,6 +23,15 @@ functions:
       - http:
           method: post
           path: pedido
+  prepararPedido:
+    handler: handler.prepararPedido
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - PendingOrdersQueue
+              - Arn
+          batchSize: 1
 
 resources:
   Resources:

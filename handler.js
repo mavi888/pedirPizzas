@@ -28,6 +28,13 @@ module.exports.hacerPedido = (event, context, callback) => {
 	});
 };
 
+module.exports.prepararPedido = (event, context, callback) => {
+	console.log('Preparar pedido fue llamada');
+
+	console.log(event);
+	callback();
+};
+
 function sendResponse(statusCode, message, callback) {
 	const response = {
 		statusCode: statusCode,
