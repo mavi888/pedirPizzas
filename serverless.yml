@@ -4,6 +4,10 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-west-1
+  environment:
+    REGION: ${self:provider.region}
+    PENDING_ORDER_QUEUE:
+      Ref: PendingOrdersQueue
 
 functions:
   hacerPedido:
@@ -12,3 +16,10 @@ functions:
       - http:
           method: post
           path: pedido
+
+resources:
+  Resources:
+    PendingOrdersQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "PendingOrdersQueue"
