@@ -51,3 +51,21 @@ module.exports.deliverOrder = orderId => {
 			return response.Attributes;
 		});
 };
+
+module.exports.getOrder = orderId => {
+	console.log('El metodo obtener una orden fue llamado');
+
+	const params = {
+		TableName: process.env.COMPLETED_ORDER_TABLE,
+		Key: {
+			orderId
+		}
+	};
+
+	return dynamo
+		.get(params)
+		.promise()
+		.then(item => {
+			return item.Item;
+		});
+};

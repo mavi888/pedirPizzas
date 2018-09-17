@@ -53,6 +53,12 @@ functions:
             Fn::GetAtt:
               - CompletedOrdersTable
               - StreamArn
+  estadoPedido:
+    handler: handler.estadoPedido
+    events:
+      - http:
+          method: get
+          path: pedido/{orderId}
 
 resources:
   Resources:

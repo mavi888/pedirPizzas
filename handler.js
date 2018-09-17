@@ -78,6 +78,24 @@ module.exports.enviarPedido = (event, context, callback) => {
 	}
 };
 
+module.exports.estadoPedido = (event, context, callback) => {
+	console.log('Estado pedido fue llamado');
+
+	const orderId = event.pathParameters && event.pathParameters.orderId;
+	if (orderId !== null) {
+		orderMetadataManager
+			.getOrder(orderId)
+			.then(order => {
+				sendResponse(200, `El estado de la orden: ${orderId} es ${order.delivery_status}`, callback);
+			})
+			.catch(error => {
+				sendResponse(500, 'Hubo un error al procesar el pedido', callback);
+			});
+	} else {
+		sendResponse(400, 'Falta el orderId', callback);
+	}
+};
+
 function sendResponse(statusCode, message, callback) {
 	const response = {
 		statusCode: statusCode,
